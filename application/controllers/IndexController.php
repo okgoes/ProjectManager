@@ -10,7 +10,9 @@ class IndexController extends BaseController
 
     public function indexAction()
     {
-    	
+        $test = new Document_Output();
+        $test->outPut();
+        exit;
     }
 
 

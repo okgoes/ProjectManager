@@ -1,0 +1,360 @@
+<?php echo $this->render('./public/header.phtml');?>
+<style type='text/css'>
+    .tree{
+/* 	   background: #282C34; */
+/*     	color: white; */
+    }
+    .tree,.tree-node,.tree-node-title,.tree-son-node-title{
+        width: auto;
+    	cursor:pointer;
+    }
+    .tree-node-title{
+        height: 35px;
+    	line-height: 24px;
+    	padding: 5px;
+    	border: 1px solid WhiteSmoke;
+    	padding: 5px 5px;
+    	background: WhiteSmoke;
+    	border-radius: 4px;
+    }
+    .tree-node-title span{
+	    font-size:2.0rem;
+    	font-weight: bold;
+    }
+    .tree-son-node-title span {
+	   font-weight: bold;
+	   padding: 2px 5px;
+    }
+    .tree-son-node-title{
+        text-indent:2rem;
+        height: 28px;
+        line-height:38px;
+    }
+    .tree-node-close .tree-son-node-title{
+	    display:none;
+    }
+    .tree-node-open .tree-son-node-title{
+	    display:block;
+    }
+    .tree-node-open .tree-son-node-title.active{
+	    background: LightSkyBlue ;
+    }
+    .create-node{
+	    margin-top: -6px;float: right; font-size:14px;
+    }
+    .content-menu{
+        width: 100px;
+        display: none;
+    	position: absolute;
+    	border: 1px solid WhiteSmoke;
+    	border-radius: 4px;
+    	background: WhiteSmoke;
+    }
+    .content-menu p {
+	    text-align: center;
+        cursor: pointer;
+/*     	margin-top: -10px; */
+    	height: 35px;
+    	line-height: 35px;
+    }
+    .content-menu p:hover {
+	    background: LightSkyBlue ;
+    }
+    .interface-submit{
+	    width: 200px;
+    }
+</style>
+<?php echo $this->render('./public/nav.phtml');?>
+
+<div class='container-fluid'>
+	<div class='row'>
+		<div class='col-lg-3'>
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                    <h3 class="panel-title">项目列表</h3>
+              </div>
+              <div class="panel-body">
+                 <div class='tree'>
+                    <div class='tree-node tree-node-open'>
+                        <div class='tree-node-title'><span>+</span>圈子开发<!-- <a class='btn btn-default create-node'>创建</a> --></div>
+                        <div class='tree-son-node-title active'><span>─</span>获取圈子</div>
+                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                    </div>
+                    <div class='tree-node tree-node-close'>
+                        <div class='tree-node-title'><span>+</span>圈子开发</div>
+                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                    </div>
+                 </div>
+              </div>
+          </div>
+		</div>
+		<div class='col-lg-9'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>接口创建</h3>
+                </div>
+                <div class='panel-body'>
+                    <form class="form-horizontal" role="form">
+<!--                        <div class="form-group"> -->
+<!--                          <label class="col-sm-2 control-label">Email</label> -->
+<!--                          <div class="col-sm-10"> -->
+<!--                            <p class="form-control-static">email@example.com</p> -->
+<!--                          </div> -->
+<!--                        </div> -->
+                       <div class="form-group">
+                         <label for="inputPassword" class="col-sm-2 control-label">接口名称:</label>
+                         <div class="col-sm-10">
+                           <input type="text" name='interface_name' class="form-control"  placeholder="请输入接口名称">
+                         </div>
+                       </div>
+                       <div class="form-group">
+                         <label for="inputPassword" class="col-sm-2 control-label">接口URL:</label>
+                         <div class="col-sm-10">
+                           <input type="text" name='interface_url' class="form-control"  placeholder="请输入接口URL">
+                         </div>
+                       </div>
+                       
+                       <div class="form-group">
+                         <label for="inputPassword" class="col-sm-2 control-label">接口URL:</label>
+                         <div class="col-sm-10">
+                           <select name='interface_method' style='width: 200px;' class="form-control">
+                             <option value="1">GET</option>
+                             <option value="2">POST</option>
+                             <option value="3">PUT</option>
+                             <option value="4">DELETE</option>
+                             <option value="5">OPTIONS</option>
+                           </select>
+                         </div>
+                       </div>
+                       
+                       <div class="form-group">
+                         <label for="inputPassword" class="col-sm-2 control-label">接口描述:</label>
+                         <div class="col-sm-10">
+                           <textarea name='description' class="form-control" rows="4"></textarea>
+                         </div>
+                       </div>
+                       <p style='font-size: 1.5rem; font-weight: bold;'>参数信息填写</p>
+                       <div class='interface_params'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th>字段</th>
+                                        <th>类型</th>
+                                        <th>是否必填</th>
+                                        <th>含义</th>
+                                        <th>示例</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                        <td>4</td>
+                                        <td>5</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                       </div>
+                       
+                       <p style='font-size: 1.5rem; font-weight: bold;'>响应信息填写</p>
+                       <div class='interface_results'>
+                            <table class='table'>
+                                <thead>
+                                    <tr>
+                                        <th>字段</th>
+                                        <th>类型</th>
+                                        <th>一定存在</th>
+                                        <th>含义</th>
+                                        <th>示例</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>2</td>
+                                        <td>3</td>
+                                        <td>4</td>
+                                        <td>5</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                       </div>
+                       <div style='text-align: center;'><a class='btn btn-default interface-submit'>提交</a></div>
+                     </form>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+<div class='content-menu'>
+    <p data-type='1'>向上插入一行</p>
+    <p data-type='2'>向下插入一行</p>
+</div>
+<script type="text/javascript">
+	$(function() {
+		$('.tree-node-title').bind('click', function() {
+			if ($(this).parent().filter('.tree-node-open').length) {
+				$(this).parent().removeClass('tree-node-open');
+				$(this).parent().addClass('tree-node-close');
+			} else {
+				$(this).parent().addClass('tree-node-open');
+				$(this).parent().removeClass('tree-node-close');
+				$('.tree-node-open .tree-son-node-title').unbind().bind('click', function() {
+					$('.tree-node-open .tree-son-node-title').removeClass('active');
+					$(this).addClass('active');
+				});
+			}
+		});
+		$('.tree-node-open .tree-son-node-title').bind('click', function() {
+			$('.tree-node-open .tree-son-node-title').removeClass('active');
+			$(this).addClass('active');
+		});
+		$('tr td').bind('click', function() {
+			$(this).prop('contenteditable', 'true');
+		});
+		$('tr td').bind('mouseup', function(e) {
+			var res = $('.content-menu')[0];
+			if (e.button !==2 ) {    //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
+		      res.style.display = 'none';     //否则不显示div盒子
+		    }
+		});
+		function contentMenuShow(e) 
+		{
+			var res = $('.content-menu')[0];
+			if(e.button === 2){    //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
+			      res.style.top = e.clientY+'px';   //鼠标点击时给div定位Y轴
+			      res.style.left = e.clientX+'px';  //鼠标点击时给div定位X轴
+			      res.style.display = 'block';
+			      var className = 'content_table';
+			      $('tr').removeClass(className);
+			      $(this).parent().addClass(className);
+			      $('.content-menu').prop('data-ele', className);
+			      return false;   //显示div盒子
+		    } else {
+			      res.style.display = 'none';     //否则不显示div盒子
+		    }
+		}
+		$('tr td').bind('contextmenu', contentMenuShow);
+		$('body').on('click', function() {
+			$('.content-menu').css('display', 'none');
+		});
+		$('.content-menu').bind('click', function(e) {
+			e = e || window.event;
+		    if(e.stopPropagation) { //W3C阻止冒泡方法
+		        e.stopPropagation();
+		    } else {
+		        e.cancelBubble = true; //IE阻止冒泡方法
+		    }
+		});
+		$('.content-menu p').bind('click', function(e) {
+			e = e || window.event;
+		    if(e.stopPropagation) { //W3C阻止冒泡方法
+		        e.stopPropagation();
+		    } else {
+		        e.cancelBubble = true; //IE阻止冒泡方法
+		    }
+			var type = $(this).attr('data-type');
+			switch(type) {
+				case '1':
+					$('.' + $(this).parent().prop('data-ele')).before('<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>');
+					$('tr td').unbind('click').bind('click', function() {
+						$(this).prop('contenteditable', 'true');
+					});
+					$('tr td').unbind('contextmenu').bind('contextmenu', contentMenuShow);
+					break;
+				case '2': 
+					$('.' + $(this).parent().prop('data-ele')).after('<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>');
+					$('tr td').unbind('click').bind('click', function() {
+						$(this).prop('contenteditable', 'true');
+					});
+					$('tr td').unbind('contextmenu').bind('contextmenu', contentMenuShow);
+					break;
+			}
+		});
+		$('.interface-submit').unbind('click').bind('click', function() {
+			var name = $('input[name="interface_name"]').val();
+			var url = $('input[name="interface_url"]').val();
+			var request_method = $('input[name="interface_method"]').val();
+			var description = $('textarea[name="description"]').val();
+			var params = [];
+			var results = [];
+			$('.interface_params table tbody tr').each(function(i) {
+				$(this).find('td').each(function(j) {
+					params[i] = [];
+					switch(j) {
+						case 0: 
+							params[i]['fieldName'] = $(this).html();
+							break;
+						case 1: 
+							params[i]['fieldType'] = $(this).html();
+							break;
+						case 2: 
+							params[i]['required'] = $(this).html();
+							break;
+						case 3: 
+							params[i]['comment'] = $(this).html();
+							break;
+						case 4: 
+							params[i]['case'] = $(this).html();
+							break;
+					}
+				});
+			});
+
+			$('.interface_results table tbody tr').each(function(i) {
+				$(this).find('td').each(function(j) {
+					results[i] = [];
+					console.log(j);
+					switch(j) {
+						case 0: 
+							results[i]['rFieldName'] = $(this).html();
+							console.log(results);
+							break;
+						case 1: 
+							results[i]['rFieldType'] = $(this).html();
+							break;
+						case 2: 
+							results[i]['rRequired'] = $(this).html();
+							break;
+						case 3: 
+							results[i]['rComment'] = $(this).html();
+							break;
+						case 4: 
+							results[i]['rCase'] = $(this).html();
+							break;
+					}
+				});
+			});
+			console.log(params, results);
+			$.ajax({
+				url: '/interface/create',
+				data: {name: name, url: url, request_method: request_method, description: description, params: params, results: results},
+				dataType: 'json',
+				type: 'post',
+				success: function(data) {
+					
+				},
+				error: function(err) {
+					
+				}
+			});
+		});
+// 		$('.create-node').bind('click', function(e) {
+// 			e = e || window.event;
+// 		    if(e.stopPropagation) { //W3C阻止冒泡方法
+// 		        e.stopPropagation();
+// 		    } else {
+// 		        e.cancelBubble = true; //IE阻止冒泡方法
+// 		    }
+// 		    if ($(this).parent().parent().filter('.tree-node-open').length) {
+// 		    	$(this).parent().parent().append();
+// 		    }
+// 		});
+	});
+</script>
+<?php echo $this->render('./public/footer.phtml');?>

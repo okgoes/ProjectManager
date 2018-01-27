@@ -1,9 +1,11 @@
 <?php
 class Document_Output extends Document {
     private $_word = null;
+    private $_api = null;
     public function __construct()
     {
         $this->_word = $this->getPhpWord();
+        $this->_api = new Document_Interface_Api($this->_word);
     }
     
     private function _header() 
@@ -13,8 +15,9 @@ class Document_Output extends Document {
     
     public function outPut() 
     {   
-        $this->setTable(10, 20);
-        $this->_word->save('test.docx', 'Word2007', true);
+        $this->_api->outPut('接口文档');
+//         $this->setTable(10, 20);
+//         $this->_word->save('test.docx', 'Word2007', true);
     }
     
     private function _section($style = null) 

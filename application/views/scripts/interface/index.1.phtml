@@ -128,7 +128,7 @@
                        </div>
                        
                        <div class="form-group">
-                         <label for="inputPassword" class="col-sm-2 control-label">请求方式:</label>
+                         <label for="inputPassword" class="col-sm-2 control-label">接口URL:</label>
                          <div class="col-sm-10">
                            <select name='interface_method' style='width: 200px;' class="form-control">
                              <option value="1">GET</option>
@@ -160,11 +160,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    <tr>
+                                        <td>1</td>
+                                        <td class='select'>
+											<select name='params_type' style='width: 200px;' class="form-control">
+												<option value="1">int</option>
+												<option value="2">float</option>
+												<option value="3">string</option>
+												<option value="4">boolean</option>
+												<option value="5">array</option>
+												<option value="6">object</option>
+											</select>
+										</td>
+                                        <td>3</td>
+                                        <td>4</td>
+                                        <td>5</td>
+										<td class='op'><a class='btn btn-default next-level'>下一级</a></td>
+                                    </tr>
                                 </tbody>
-								<tfoot>
-									<tr><td colspan='6'><a class='btn btn-default'>增加参数</a></td></tr>
-								</tfoot>
                             </table>
                        </div>
                        
@@ -197,12 +210,9 @@
                                         <td>3</td>
                                         <td>4</td>
                                         <td>5</td>
-										<td class='op'><a class='btn btn-default next-level'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>
+										<td class='op'><a class='btn btn-default next-level'>下一级</a></td>
                                     </tr>
                                 </tbody>
-								<tfoot>
-									<tr><td colspan='6'><a class='btn btn-default'>增加参数</a></td></tr>
-								</tfoot>
                             </table>
                        </div>
                        <div style='text-align: center;'><a class='btn btn-default interface-submit'>提交</a></div>
@@ -218,57 +228,45 @@
 </div>
 
 <!-- Modal -->
-
 <div class="modal fade" id="dialogForParams" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">请求参数</h4>
+        <h4 class="modal-title" id="myModalLabel">二级参数</h4>
       </div>
       <div class="modal-body">
-	  <form class="form-horizontal" role="form">
-		<div class="form-group">
-			<label for="inputPassword" class="col-sm-2 control-label">字段名称:</label>
-			<div class="col-sm-10">
-			<input type="text" name='fieldName' class="form-control"  placeholder="请输入字段名称">
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="inputPassword" class="col-sm-2 control-label">参数类型:</label>
-			<div class="col-sm-10">
-				<select name='fieldType' style='width: 200px;' class="form-control">
-					<option value="1">整型（int）</option>
-					<option value="2">浮点型（float）</option>
-					<option value="3">字符型（string）</option>
-					<option value="4">布尔型（boolean）</option>
-					<option value="5">数组（array）</option>
-					<option value='6'>对象（object）</option>
-				</select>
-			</div>
-		</div>
-		<div class='form-group'>
-			<label for="inputPassword" class="col-sm-2 control-label">是否必填:</label>
-			<label class="radio-inline">
-				<input type="radio" name="required" id="inlineRadio1" value="option1" checked>是
-			</label>
-			<label class="radio-inline">
-				<input type="radio" name="required" id="inlineRadio2" value="option2"> 否
-			</label>
-		</div>
-		<div class="form-group">
-			<label for="inputPassword" class="col-sm-2 control-label">含义:</label>
-			<div class="col-sm-10">
-			<input type="text" name='comment' class="form-control"  placeholder="请输入字段含义">
-			</div>
-		</div>
-		<div class="form-group">
-			<label for="inputPassword" class="col-sm-2 control-label">示例:</label>
-			<div class="col-sm-10">
-				<input type="text" name='case' class="form-control"  placeholder="请输入示例">
-			</div>
-		</div>
-		</form>
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>字段</th>
+					<th>类型</th>
+					<th>一定存在</th>
+					<th>含义</th>
+					<th>示例</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td class='select'>
+						<select name='params_type' style='width: 200px;' class="form-control">
+							<option value="1">int</option>
+							<option value="2">float</option>
+							<option value="3">string</option>
+							<option value="4">boolean</option>
+							<option value="5">array</option>
+							<option value="6">object</option>
+						</select>
+					</td>
+					<td>3</td>
+					<td>4</td>
+					<td>5</td>
+					<td class='op'><a class='btn btn-default next-level'>下一级</a></td>
+				</tr>
+			</tbody>
+		</table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -278,8 +276,6 @@
   </div>
 </div>
 
-
-<script type='text/javascript' src='/js/params.js'></script>
 <script type="text/javascript">
 	var pRows = [];
 	var rRows = [];
@@ -300,6 +296,12 @@
 		$('.tree-node-open .tree-son-node-title').bind('click', function() {
 			$('.tree-node-open .tree-son-node-title').removeClass('active');
 			$(this).addClass('active');
+		});
+		$('tr td').bind('click', function() {
+			if ($(this).filter('.op').length || $(this).filter('.select').length) {
+				return true;
+			}
+			$(this).prop('contenteditable', 'true');
 		});
 		$('tr td').bind('mouseup', function(e) {
 			var res = $('.content-menu')[0];

@@ -13,4 +13,9 @@ class InterfaceController extends BaseController
     	
     }
 
+    public function createAction()
+    {
+        echo json_encode($_POST);
+        $this->setNoViewRender();
+    }
 }

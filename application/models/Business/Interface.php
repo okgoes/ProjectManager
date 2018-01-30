@@ -4,7 +4,7 @@ class Business_Interface {
     private $_interface = null;
     private $_interfaceParams = null;
     private $_interfaceResults = null;
-    
+
     public function __construct() 
     {
         $this->_interface = new Tables_Interface();
@@ -26,6 +26,7 @@ class Business_Interface {
                 "request_method" => $data['request_method'],
                 "description" => $data['description'],
                 "sort" => 0,
+                "state" => 1,
                 "createtime" => time(),
                 'updatetime' => time()
             ));
@@ -52,7 +53,7 @@ class Business_Interface {
             //     'updatetime' => time()
             // ));
             $db->commit();
-            return $interfaceId;
+            return Result::result(Result::SUCCESS_CODE, $interfaceId, Result::SUCCESS);
         } catch (Exception $e) {
             var_dump($e);
             $db->rollBack();
@@ -62,17 +63,32 @@ class Business_Interface {
 
     public function createParam($data) 
     {
-        return $this->_interfaceParams->insert(array(
-            'interface_id' => $interfaceId,
+        $id = $this->_interfaceParams->insert(array(
+            'interface_id' => $data['interfaceId'],
             'field_name' => $data['fieldName'],
             'field_type' => $data['fieldType'],
             'fieid_length' => null,
             'required' => $data['required'],
             'comment' => $data['comment'],
             'parent_id' => $data['parent_id'],
+            'state' => 1,
             "createtime" => time(),
             'updatetime' => time()
         ));
+        return Result::result(Result::SUCCESS_CODE, $id, Result::SUCCESS);
     }
 
+    public function getLists() 
+    {
+        $data = $this->_interface->select()->where('state = ?', 1)->query()->fetchAll();
+//         return Result::result(Result::SUCCESS_CODE, $data, Result::SUCCESS);
+        return $data;
+    }
+    
+    public function detail($interfaceId) 
+    {
+        $params = $this->_interfaceParams->select()->where('interface_id = ?', $interfaceId)->query()->fetchAll();
+        $results = $this->_interfaceResults->select()->where('interface_id = ?', $interfaceId)->query()->fetchAll();
+        return Result::result(Result::SUCCESS_CODE, array($params, $results), Result::SUCCESS);
+    }
 }

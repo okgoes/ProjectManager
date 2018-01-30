@@ -84,19 +84,23 @@
               </div>
               <div class="panel-body">
                  <div class='tree'>
+                    <?php foreach ($this->project as $pKey => $project) :?>
+                    <?php if ($pKey == 0) :?>
                     <div class='tree-node tree-node-open'>
-                        <div class='tree-node-title'><span>+</span>圈子开发<!-- <a class='btn btn-default create-node'>创建</a> --></div>
-                        <div class='tree-son-node-title active'><span>─</span>获取圈子</div>
-                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
-                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
-                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
-                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
+                        <div class='tree-node-title'><span>+</span><?=$project["name"]?><!-- <a class='btn btn-default create-node'>创建</a> --></div>
+                        <?php else :?>
+                        <div class='tree-node tree-node-close'>
+                        <div class='tree-node-title'><span>+</span><?=$project["name"]?></div>
+                        <?php endif;?>
+                        <?php $count = 0; foreach ($this->interface as $iKey => $interface): $count++?>
+                        <?php if ($interface['project_id'] == $project['id'] && $count == 1) :?>
+                        <div data-id='<?=$interface['id']?>' class='tree-son-node-title active'><span>─</span><?=$interface["name"]?></div>
+                        <?php elseif ($interface['project_id'] == $project['id']):?>
+                        <div data-id='<?=$interface['id']?>' class='tree-son-node-title'><span>─</span><?=$interface["name"]?></div>
+                        <?php endif;?>
+                        <?php endforeach;?>
                     </div>
-                    <div class='tree-node tree-node-close'>
-                        <div class='tree-node-title'><span>+</span>圈子开发</div>
-                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
-                        <div class='tree-son-node-title'><span>─</span>获取圈子</div>
-                    </div>
+                    <?php endforeach;?>
                  </div>
               </div>
           </div>
@@ -104,7 +108,7 @@
 		<div class='col-lg-9'>
             <div class='panel panel-default'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title'>接口创建</h3>
+                    <h3 class='panel-title'>接口详情</h3>
                 </div>
                 <div class='panel-body'>
                     <form class="form-horizontal" role="form">
@@ -114,6 +118,7 @@
 <!--                            <p class="form-control-static">email@example.com</p> -->
 <!--                          </div> -->
 <!--                        </div> -->
+                        <input type='hidden' value='' name='interfaceId'>
                        <div class="form-group">
                          <label for="inputPassword" class="col-sm-2 control-label">接口名称:</label>
                          <div class="col-sm-10">
@@ -283,6 +288,7 @@
 		$('.tree-node-open .tree-son-node-title').bind('click', function() {
 			$('.tree-node-open .tree-son-node-title').removeClass('active');
 			$(this).addClass('active');
+			getParamsAndResults($(this).attr('data-id'));
 		});
 
 		$('.add-params-button').bind('click', function(){
@@ -294,7 +300,7 @@
 		$('tr td').bind('mouseup', function(e) {
 			var res = $('.content-menu')[0];
 			if (e.button !==2 ) {    //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
-		      res.style.display = 'none';     //否则不显示div盒子
+		      	res.style.display = 'none';     //否则不显示div盒子
 		    }
 		});
 		function contentMenuShow(e) 
@@ -330,20 +336,21 @@
 			var url = $('input[name="interface_url"]').val();
 			var request_method = $('select[name="interface_method"]').val();
 			var description = $('textarea[name="description"]').val();
-			$.ajax({
-				url: '/interface/create',
-				data: {name: name, url: url, request_method: request_method, description: description},
-				dataType: 'json',
-				type: 'post',
-				success: function(data) {
-					console.log(data);
-				},
-				error: function(err) {
+			updateInterface();
+// 			$.ajax({
+// 				url: '/interface/create',
+// 				data: {name: name, url: url, request_method: request_method, description: description},
+// 				dataType: 'json',
+// 				type: 'post',
+// 				success: function(result) {
+// 					$('.interface_results').prop('data-interface_id', result.data);
+// 					$('.interface_params').prop('data-interface_id', result.data);
+// 				},
+// 				error: function(err) {
 					
-				}
-			});
+// 				}
+// 			});
 		});
-
 	});
 </script>
 <?php echo $this->render('./public/footer.phtml');?>

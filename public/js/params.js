@@ -6,6 +6,9 @@ function createRows(isParam)
     return dialogResults();
 }
 
+/**
+ * 创建参数
+ */
 function dialogParams() {
     $('.control-label-required').html('是否必填');
     $('#dialogForParams').modal({show: true});
@@ -20,14 +23,40 @@ function dialogParams() {
         if (!/\S/.test(data.fieldName)) {
             return alert('字段不能为空');
         }
+        data.interfaceId = $('.interface_params').prop('data-interface_id');
+        if (!/\S/.test(data.interfaceId)) {
+            return alert('接口不存在');
+        }
+        
+        var parentId = $("#dialogForParams").prop('data-params-id');
+        var level = $("#dialogForParams").prop('data-params-level');
+        var type = $("#dialogForParams").prop('data-type');
+        if (type != 'params') {
+            return alert('非参数增加');
+        }
+        data.parent_id = 0;
+        if (parentId) {
+            data.parent_id = parentId;
+        }
+        if (!level) {
+            level = 1;
+        }
         $.ajax({
             url: '/interface/createParams',
             data: data,
             dataType: 'json',
             type: 'post',
-            success: function(results) {
+            success: function(result) {
                 var html = '<tr>';
-                html += '<td>' + data.fieldName + '</td>';
+                if (level > 1) {
+                    html += '<td>|';
+                } else {
+                    html += '<td>';
+                }
+                for (var i = 0; i < level; i ++) {
+                    html +=  + '-';
+                }
+                html += data.fieldName + '</td>';
                 html += "<td> " + $("#dialogForParams select[name='fieldType'] option[value='" + data.fieldType + "']").html() + "</td>";
                 html += "<td> " + (data.required == 1 ? "是" : "否") + "</td>";
                 html += "<td> " + data.comment + "</td>";
@@ -36,19 +65,27 @@ function dialogParams() {
                 html += "</tr>";
                 $('.interface_params table tbody').append(html);
                 clear();
-                $('.next-level').prop('data-params-id', results.id);
-                $('.next-level').unbind('click').bind('click', function() {
-                    $("#dialogForParams").prop('data-params-id', $(this).prop('data-params-id'));
-                    $("#dialogForParams").prop('data-type', 'params');
-                    $("#dialogForParams").modal({show: true});
-                    $("#dialogForParams").on('shown.bs.modal', function (e) {
-                    })
-                });
+                createSonParams(result.id, level);
             },
             error: function(err) {
                 console.log(err);
             }
         });
+    });
+}
+
+/**
+ * 创建子级参数
+ */
+function createSonParams(parentId, levels) 
+{
+    $('.next-level').prop('data-params-id', parentId);
+    $('.next-level').prop('data-params-level', levels);
+    $('.next-level').unbind('click').bind('click', function() {
+        $("#dialogForParams").prop('data-params-id', $(this).prop('data-params-id'));
+        $("#dialogForParams").prop('data-params-level', $(this).prop('data-params-level'));
+        $("#dialogForParams").prop('data-type', 'params');
+        $("#dialogForParams").modal({show: true});
     });
 }
 
@@ -108,4 +145,33 @@ function dialogResults() {
     });
 }
 
+function getParamsAndResults(interfaceId) {
+	$.ajax({
+		url: '/interface/detail',
+		data: {interfaceId: interfaceId},
+		dataType: 'json',
+		type: 'post',
+		success: function(data) {
+			
+		},
+		error: function(err) {
+			
+		}
+	});
+}
+
+function updateInterface(interfaceId, name, url, requestMethod, description) {
+	$.ajax({
+		url: '/interface/update',
+		data: {interfaceId: interfaceId, name: name, url: url, requestMethod:requestMethod, description: description },
+		dataType: 'json',
+		type: 'post',
+		success: function(data) {
+			
+		},
+		error: function(err) {
+			
+		}
+	});
+}
 

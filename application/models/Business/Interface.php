@@ -7,9 +7,9 @@ class Business_Interface {
     
     public function __construct() 
     {
-        $this->_interface = new Table_Interface();
-        $this->_interfaceParams = new Table_InterfaceParams();
-        $this->_interfaceResults = new Table_InterfaceResults();
+        $this->_interface = new Tables_Interface();
+        $this->_interfaceParams = new Tables_InterfaceParams();
+        $this->_interfaceResults = new Tables_InterfaceResults();
     }
     
     /**
@@ -29,33 +29,50 @@ class Business_Interface {
                 "createtime" => time(),
                 'updatetime' => time()
             ));
-            var_dump($interfaceId);
-            $this->_interfaceParams->insert(array(
-                'interface_id' => $interfaceId,
-                'field_name' => $data['fieldName'],
-                'field_type' => $data['fieldType'],
-                'fieid_length' => null,
-                'required' => $data['required'],
-                'comment' => $data['comment'],
-                'parent_id' => $data['parent_id'],
-                "createtime" => time(),
-                'updatetime' => time()
-            ));
-            $this->_interfaceResults->insert(array(
-                "interface_id" => $interfaceId,
-                "field_name" => $data['rFieldName'],
-                'field_type' => $data['rFieldType'],
-                'required' => $data['rRequired'],
-                'comment' => $data['rComment'],
-                'parent_id' => $data['rParent_id'],
-                "createtime" => time(),
-                'updatetime' => time()
-            ));
+            // var_dump($interfaceId);
+            // $this->_interfaceParams->insert(array(
+            //     'interface_id' => $interfaceId,
+            //     'field_name' => $data['fieldName'],
+            //     'field_type' => $data['fieldType'],
+            //     'fieid_length' => null,
+            //     'required' => $data['required'],
+            //     'comment' => $data['comment'],
+            //     'parent_id' => $data['parent_id'],
+            //     "createtime" => time(),
+            //     'updatetime' => time()
+            // ));
+            // $this->_interfaceResults->insert(array(
+            //     "interface_id" => $interfaceId,
+            //     "field_name" => $data['rFieldName'],
+            //     'field_type' => $data['rFieldType'],
+            //     'required' => $data['rRequired'],
+            //     'comment' => $data['rComment'],
+            //     'parent_id' => $data['rParent_id'],
+            //     "createtime" => time(),
+            //     'updatetime' => time()
+            // ));
             $db->commit();
+            return $interfaceId;
         } catch (Exception $e) {
+            var_dump($e);
             $db->rollBack();
         }
-        
+        return 0;
+    }
+
+    public function createParam($data) 
+    {
+        return $this->_interfaceParams->insert(array(
+            'interface_id' => $interfaceId,
+            'field_name' => $data['fieldName'],
+            'field_type' => $data['fieldType'],
+            'fieid_length' => null,
+            'required' => $data['required'],
+            'comment' => $data['comment'],
+            'parent_id' => $data['parent_id'],
+            "createtime" => time(),
+            'updatetime' => time()
+        ));
     }
 
 }

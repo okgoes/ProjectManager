@@ -163,7 +163,7 @@
                                     
                                 </tbody>
 								<tfoot>
-									<tr><td colspan='6'><a class='btn btn-default'>增加参数</a></td></tr>
+									<tr><td colspan='6'><a class='btn btn-default add-params-button'>增加参数</a></td></tr>
 								</tfoot>
                             </table>
                        </div>
@@ -182,26 +182,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td class='select'>
-											<select name='params_type' style='width: 200px;' class="form-control">
-												<option value="1">int</option>
-												<option value="2">float</option>
-												<option value="3">string</option>
-												<option value="4">boolean</option>
-												<option value="5">array</option>
-												<option value="6">object</option>
-											</select>
-										</td>
-                                        <td>3</td>
-                                        <td>4</td>
-                                        <td>5</td>
-										<td class='op'><a class='btn btn-default next-level'><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></td>
-                                    </tr>
                                 </tbody>
 								<tfoot>
-									<tr><td colspan='6'><a class='btn btn-default'>增加参数</a></td></tr>
+									<tr><td colspan='6'><a class='btn btn-default add-results-button'>增加参数</a></td></tr>
 								</tfoot>
                             </table>
                        </div>
@@ -248,12 +231,12 @@
 			</div>
 		</div>
 		<div class='form-group'>
-			<label for="inputPassword" class="col-sm-2 control-label">是否必填:</label>
+			<label for="inputPassword" class="col-sm-2 control-label control-label-required">是否必填:</label>
 			<label class="radio-inline">
-				<input type="radio" name="required" id="inlineRadio1" value="option1" checked>是
+				<input type="radio" name="required" id="inlineRadio1" value="1" checked>是
 			</label>
 			<label class="radio-inline">
-				<input type="radio" name="required" id="inlineRadio2" value="option2"> 否
+				<input type="radio" name="required" id="inlineRadio2" value="0"> 否
 			</label>
 		</div>
 		<div class="form-group">
@@ -301,6 +284,13 @@
 			$('.tree-node-open .tree-son-node-title').removeClass('active');
 			$(this).addClass('active');
 		});
+
+		$('.add-params-button').bind('click', function(){
+			createRows(1);
+		});
+		$('.add-results-button').bind('click', function(){
+			createRows(0);
+		});
 		$('tr td').bind('mouseup', function(e) {
 			var res = $('.content-menu')[0];
 			if (e.button !==2 ) {    //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
@@ -335,106 +325,14 @@
 		        e.cancelBubble = true; //IE阻止冒泡方法
 		    }
 		});
-		$('.next-level').unbind('click').bind('click', function() {
-			$("#dialogForParams").modal({show: true});
-			$("#dialogForParams").on('shown.bs.modal', function (e) {
-				// alert(1);
-			})
-		});
-		$('.content-menu p').bind('click', function(e) {
-			e = e || window.event;
-		    if(e.stopPropagation) { //W3C阻止冒泡方法
-		        e.stopPropagation();
-		    } else {
-		        e.cancelBubble = true; //IE阻止冒泡方法
-		    }
-			var type = $(this).attr('data-type');
-			switch(type) {
-				case '1':
-					$('.' + $(this).parent().prop('data-ele')).before('<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td class="op"><a class="btn btn-default next-level">下一级</a></td></tr>');
-					$('tr td').unbind('click').bind('click', function() {
-						$(this).prop('contenteditable', 'true');
-					});
-					$('tr td').unbind('contextmenu').bind('contextmenu', contentMenuShow);
-					break;
-				case '2': 
-					$('.' + $(this).parent().prop('data-ele')).after('<tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td class="op"><a class="btn btn-default next-level">下一级</a></td></tr>');
-					$('tr td').unbind('click').bind('click', function() {
-						$(this).prop('contenteditable', 'true');
-					});
-					$('tr td').unbind('contextmenu').bind('contextmenu', contentMenuShow);
-					break;
-			}
-		});
 		$('.interface-submit').unbind('click').bind('click', function() {
 			var name = $('input[name="interface_name"]').val();
 			var url = $('input[name="interface_url"]').val();
-			var request_method = $('input[name="interface_method"]').val();
+			var request_method = $('select[name="interface_method"]').val();
 			var description = $('textarea[name="description"]').val();
-			var params = [];
-			var results = [];
-			$('.interface_params table tbody tr').each(function(i) {
-				// params[i] = [];
-				$(this).find('td').each(function(j) {
-					switch(j) {
-						case 0: 
-							// params[i]['fieldName'] = $(this).html();
-							params.push({fieldName: $(this).html()});
-							break;
-						case 1: 
-							// params[i]['fieldType'] = $(this).html();
-							params.push({fieldType: $(this).find('select').val()});
-							break;
-						case 2: 
-							// params[i]['required'] = $(this).html();
-							params.push({required: $(this).html()});
-							break;
-						case 3: 
-							// params[i]['comment'] = $(this).html();
-							params.push({comment: $(this).html()});
-							break;
-						case 4: 
-							// params[i]['case'] = $(this).html();
-							params.push({case: $(this).html()});
-							break;
-					}
-				});
-			});
-
-			$('.interface_results table tbody tr').each(function(i) {
-				// results[i] = [];
-				$(this).find('td').each(function(j) {
-					switch(j) {
-						case 0: 
-							// results[i]['rFieldName'] = $(this).html();
-							results.push({rFieldName: $(this).html()});
-							break;
-						case 1: 
-						// console.log($(this).html());
-							// results[i]['rFieldType'] = $(this).html();
-							results.push({rFieldType: $(this).find('select').val()});
-							break;
-						case 2: 
-						// console.log($(this).html());
-							// results[i]['rRequired'] = $(this).html();
-							results.push({rRequired: $(this).html()});
-							break;
-						case 3: 
-						// console.log($(this).html());
-							// results[i]['rComment'] = $(this).html();
-							results.push({rComment: $(this).html()});
-							break;
-						case 4: 
-						// console.log($(this).html());
-							// results[i]['rCase'] = $(this).html();
-							results.push({rCase: $(this).html()});
-							break;
-					}
-				});
-			});
 			$.ajax({
 				url: '/interface/create',
-				data: {name: name, url: url, request_method: request_method, description: description, params: params, results: results},
+				data: {name: name, url: url, request_method: request_method, description: description},
 				dataType: 'json',
 				type: 'post',
 				success: function(data) {
@@ -445,17 +343,7 @@
 				}
 			});
 		});
-// 		$('.create-node').bind('click', function(e) {
-// 			e = e || window.event;
-// 		    if(e.stopPropagation) { //W3C阻止冒泡方法
-// 		        e.stopPropagation();
-// 		    } else {
-// 		        e.cancelBubble = true; //IE阻止冒泡方法
-// 		    }
-// 		    if ($(this).parent().parent().filter('.tree-node-open').length) {
-// 		    	$(this).parent().parent().append();
-// 		    }
-// 		});
+
 	});
 </script>
 <?php echo $this->render('./public/footer.phtml');?>
